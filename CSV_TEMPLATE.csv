@@ -1,0 +1,5 @@
+uid,name,phone,regionId,areaId,distributorId,territoryId,points,routes,notes
+RET-001234,Karim Store,+8801712345678,1,1,1,1,1500,Route A,Regular customer
+RET-001235,Rahman Electronics,+8801723456789,1,2,1,2,2000,Route B,Prefers morning visits
+RET-001236,Ali General Store,+8801734567890,2,3,2,3,1000,Route C,Payment terms: 30 days
+

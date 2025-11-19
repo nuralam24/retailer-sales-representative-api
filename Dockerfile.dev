@@ -1,0 +1,32 @@
+FROM node:18-alpine
+
+# Install OpenSSL and dependencies for Prisma
+RUN apk add --no-cache openssl libc6-compat
+
+WORKDIR /app
+
+# Copy package files
+COPY package*.json ./
+
+# Install dependencies
+RUN npm install --legacy-peer-deps
+
+# Copy Prisma schema
+COPY prisma ./prisma
+
+# Generate Prisma Client (initial generation for build)
+RUN npx prisma generate
+
+# Copy source code
+COPY . .
+
+# Copy entrypoint script
+COPY docker-entrypoint.sh /usr/local/bin/
+RUN chmod +x /usr/local/bin/docker-entrypoint.sh
+
+# Expose port
+EXPOSE 9999
+
+# Use entrypoint to run migrations before starting app
+ENTRYPOINT ["docker-entrypoint.sh"]
+CMD ["npm", "run", "start:dev"]

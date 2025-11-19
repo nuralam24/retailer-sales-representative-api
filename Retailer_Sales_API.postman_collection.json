@@ -1,0 +1,764 @@
+{
+  "info": {
+    "name": "Retailer Sales Representative API",
+    "description": "Complete API collection for the Retailer Sales Representative backend with pagination support",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_postman_id": "retailer-sales-api-v1",
+    "version": "1.1.0"
+  },
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{jwt_token}}",
+        "type": "string"
+      }
+    ]
+  },
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://localhost:9999/api/v1",
+      "type": "string"
+    },
+    {
+      "key": "jwt_token",
+      "value": "",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "Authentication",
+      "item": [
+        {
+          "name": "Login - Admin",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 200) {",
+                  "    const response = pm.response.json();",
+                  "    pm.collectionVariables.set('jwt_token', response.access_token);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"username\": \"admin\",\n  \"password\": \"admin123\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/auth/login",
+              "host": ["{{base_url}}"],
+              "path": ["auth", "login"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Login - Sales Rep",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 200) {",
+                  "    const response = pm.response.json();",
+                  "    pm.collectionVariables.set('jwt_token', response.access_token);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"username\": \"karim_ahmed\",\n  \"password\": \"salesrep123\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/auth/login",
+              "host": ["{{base_url}}"],
+              "path": ["auth", "login"]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Retailers (Sales Rep)",
+      "item": [
+        {
+          "name": "Get Assigned Retailers (Paginated)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/retailers?page=1&limit=20",
+              "host": ["{{base_url}}"],
+              "path": ["retailers"],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1",
+                  "description": "Page number (default: 1)"
+                },
+                {
+                  "key": "limit",
+                  "value": "20",
+                  "description": "Items per page (default: 20)"
+                },
+                {
+                  "key": "search",
+                  "value": "Store",
+                  "disabled": true,
+                  "description": "Search in name, UID, or phone"
+                },
+                {
+                  "key": "regionId",
+                  "value": "1",
+                  "disabled": true,
+                  "description": "Filter by region ID"
+                },
+                {
+                  "key": "areaId",
+                  "value": "2",
+                  "disabled": true,
+                  "description": "Filter by area ID"
+                },
+                {
+                  "key": "distributorId",
+                  "value": "1",
+                  "disabled": true,
+                  "description": "Filter by distributor ID"
+                },
+                {
+                  "key": "territoryId",
+                  "value": "1",
+                  "disabled": true,
+                  "description": "Filter by territory ID"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Retailer by UID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/retailers/RET-000001",
+              "host": ["{{base_url}}"],
+              "path": ["retailers", "RET-000001"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update Retailer",
+          "request": {
+            "method": "PATCH",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"points\": 2000,\n  \"routes\": \"Route A, Route B\",\n  \"notes\": \"Updated by sales rep\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/retailers/RET-000001",
+              "host": ["{{base_url}}"],
+              "path": ["retailers", "RET-000001"]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Admin - Regions",
+      "item": [
+        {
+          "name": "Get All Regions",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/admin/regions",
+              "host": ["{{base_url}}"],
+              "path": ["admin", "regions"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Region by ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/admin/regions/1",
+              "host": ["{{base_url}}"],
+              "path": ["admin", "regions", "1"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Create Region",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Barisal Division\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/admin/regions",
+              "host": ["{{base_url}}"],
+              "path": ["admin", "regions"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update Region",
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Barisal Division Updated\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/admin/regions/1",
+              "host": ["{{base_url}}"],
+              "path": ["admin", "regions", "1"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Region",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/admin/regions/1",
+              "host": ["{{base_url}}"],
+              "path": ["admin", "regions", "1"]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Admin - Areas",
+      "item": [
+        {
+          "name": "Get All Areas",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/admin/areas",
+              "host": ["{{base_url}}"],
+              "path": ["admin", "areas"],
+              "query": [
+                {
+                  "key": "regionId",
+                  "value": "1",
+                  "disabled": true,
+                  "description": "Filter areas by region ID"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Area by ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/admin/areas/1",
+              "host": ["{{base_url}}"],
+              "path": ["admin", "areas", "1"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Create Area",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Mirpur\",\n  \"regionId\": 1\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/admin/areas",
+              "host": ["{{base_url}}"],
+              "path": ["admin", "areas"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update Area",
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Mirpur Updated\",\n  \"regionId\": 1\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/admin/areas/1",
+              "host": ["{{base_url}}"],
+              "path": ["admin", "areas", "1"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Area",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/admin/areas/1",
+              "host": ["{{base_url}}"],
+              "path": ["admin", "areas", "1"]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Admin - Distributors",
+      "item": [
+        {
+          "name": "Get All Distributors",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/admin/distributors",
+              "host": ["{{base_url}}"],
+              "path": ["admin", "distributors"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Distributor by ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/admin/distributors/1",
+              "host": ["{{base_url}}"],
+              "path": ["admin", "distributors", "1"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Create Distributor",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"New Distributor Ltd\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/admin/distributors",
+              "host": ["{{base_url}}"],
+              "path": ["admin", "distributors"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update Distributor",
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Updated Distributor Ltd\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/admin/distributors/1",
+              "host": ["{{base_url}}"],
+              "path": ["admin", "distributors", "1"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Distributor",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/admin/distributors/1",
+              "host": ["{{base_url}}"],
+              "path": ["admin", "distributors", "1"]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Admin - Territories",
+      "item": [
+        {
+          "name": "Get All Territories",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/admin/territories",
+              "host": ["{{base_url}}"],
+              "path": ["admin", "territories"],
+              "query": [
+                {
+                  "key": "areaId",
+                  "value": "1",
+                  "disabled": true,
+                  "description": "Filter territories by area ID"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Territory by ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/admin/territories/1",
+              "host": ["{{base_url}}"],
+              "path": ["admin", "territories", "1"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Create Territory",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"New Territory\",\n  \"areaId\": 1\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/admin/territories",
+              "host": ["{{base_url}}"],
+              "path": ["admin", "territories"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update Territory",
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Updated Territory\",\n  \"areaId\": 1\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/admin/territories/1",
+              "host": ["{{base_url}}"],
+              "path": ["admin", "territories", "1"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Territory",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/admin/territories/1",
+              "host": ["{{base_url}}"],
+              "path": ["admin", "territories", "1"]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Admin - Sales Reps",
+      "item": [
+        {
+          "name": "Get All Sales Reps (Paginated)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/admin/sales-reps?page=1&limit=10",
+              "host": ["{{base_url}}"],
+              "path": ["admin", "sales-reps"],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1",
+                  "description": "Page number (default: 1)"
+                },
+                {
+                  "key": "limit",
+                  "value": "10",
+                  "description": "Items per page (default: 10)"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Sales Rep by ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/admin/sales-reps/4",
+              "host": ["{{base_url}}"],
+              "path": ["admin", "sales-reps", "4"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Create Sales Rep",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"username\": \"new_sales_rep\",\n  \"name\": \"New Sales Rep\",\n  \"phone\": \"+8801799999999\",\n  \"password\": \"password123\",\n  \"role\": \"sales_rep\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/admin/sales-reps",
+              "host": ["{{base_url}}"],
+              "path": ["admin", "sales-reps"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update Sales Rep",
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Updated Sales Rep Name\",\n  \"phone\": \"+8801799999999\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/admin/sales-reps/4",
+              "host": ["{{base_url}}"],
+              "path": ["admin", "sales-reps", "4"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Sales Rep",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/admin/sales-reps/4",
+              "host": ["{{base_url}}"],
+              "path": ["admin", "sales-reps", "4"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Retailer Count for Sales Rep",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/admin/sales-reps/4/retailers/count",
+              "host": ["{{base_url}}"],
+              "path": ["admin", "sales-reps", "4", "retailers", "count"]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Admin - Bulk Operations",
+      "item": [
+        {
+          "name": "Bulk Assign Retailers",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"salesRepId\": 4,\n  \"retailerIds\": [1, 2, 3, 4, 5]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/admin/assignments/bulk",
+              "host": ["{{base_url}}"],
+              "path": ["admin", "assignments", "bulk"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Bulk Unassign Retailers",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"salesRepId\": 4,\n  \"retailerIds\": [1, 2, 3]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/admin/assignments/bulk-unassign",
+              "host": ["{{base_url}}"],
+              "path": ["admin", "assignments", "bulk-unassign"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Import Retailers from CSV",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "file",
+                  "type": "file",
+                  "src": "/path/to/CSV_TEMPLATE.csv",
+                  "description": "Upload CSV file with retailer data"
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{base_url}}/admin/retailers/import",
+              "host": ["{{base_url}}"],
+              "path": ["admin", "retailers", "import"]
+            }
+          },
+          "response": []
+        }
+      ]
+    }
+  ]
+}
+

@@ -1,0 +1,57 @@
+FROM node:18-alpine AS builder
+
+# Install OpenSSL and dependencies for Prisma
+RUN apk add --no-cache openssl libc6-compat
+
+WORKDIR /app
+
+# Copy package files
+COPY package*.json ./
+
+# Install dependencies
+RUN npm ci --only=production --legacy-peer-deps && npm cache clean --force
+
+# Copy Prisma schema
+COPY prisma ./prisma
+
+# Generate Prisma Client
+RUN npx prisma generate
+
+# Copy source code
+COPY . .
+
+# Build application
+RUN npm run build
+
+# Production stage
+FROM node:18-alpine
+
+# Install OpenSSL and dependencies for Prisma
+RUN apk add --no-cache openssl libc6-compat
+
+WORKDIR /app
+
+# Copy package files and install production dependencies
+COPY package*.json ./
+RUN npm ci --only=production --legacy-peer-deps && npm cache clean --force
+
+# Copy Prisma schema and generate client
+COPY prisma ./prisma
+RUN npx prisma generate
+
+# Copy built application from builder
+COPY --from=builder /app/dist ./dist
+
+# Create non-root user
+RUN addgroup -g 1001 -S nodejs && adduser -S nestjs -u 1001
+USER nestjs
+
+# Expose port
+EXPOSE 9999
+
+# Health check
+HEALTHCHECK --interval=30s --timeout=3s --start-period=40s \
+  CMD node -e "require('http').get('http://localhost:9999/api/v1', (r) => r.statusCode === 200 ? process.exit(0) : process.exit(1))"
+
+# Start production server
+CMD ["node", "dist/main.js"]
