@@ -55,7 +55,7 @@ A scalable backend API for managing sales representatives and their assigned ret
 
 ```bash
 git clone https://github.com/nuralam24/retailer-sales-representative-api.git
-cd sales-repo
+cd retailer-sales-representative-api
 ```
 
 ### 2. Install Dependencies
